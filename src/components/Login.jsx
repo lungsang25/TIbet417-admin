@@ -11,7 +11,15 @@ const Login = ({setToken}) => {
     const onSubmitHandler = async (e) => {
         try {
             e.preventDefault();
-            const response = await axios.post(backendUrl + '/api/user/admin',{email,password})
+            const response = await axios.post(backendUrl + '/api/user/admin', 
+                { email, password },
+                { 
+                    withCredentials: true,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                }
+            );
             if (response.data.success) {
                 setToken(response.data.token)
             } else {
@@ -20,7 +28,7 @@ const Login = ({setToken}) => {
              
         } catch (error) {
             console.log(error);
-            toast.error(error.message)
+            toast.error(error.response?.data?.message || error.message)
         }
     }
 
